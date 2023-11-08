@@ -43,6 +43,10 @@
             this.publishBoth = new System.Windows.Forms.RadioButton();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.buildNoOne = new System.Windows.Forms.RadioButton();
+            this.publishNoOne = new System.Windows.Forms.RadioButton();
+            this.ProjectbinDirectionText = new System.Windows.Forms.TextBox();
+            this.ProjectbinDirectionLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // ProjectDirectionLabel
@@ -64,7 +68,7 @@
             // 
             // wwwrootDirection
             // 
-            this.wwwrootDirection.Location = new System.Drawing.Point(170, 39);
+            this.wwwrootDirection.Location = new System.Drawing.Point(170, 72);
             this.wwwrootDirection.Name = "wwwrootDirection";
             this.wwwrootDirection.Size = new System.Drawing.Size(618, 27);
             this.wwwrootDirection.TabIndex = 3;
@@ -73,7 +77,7 @@
             // 
             this.wwwrootDirectionLabel.AutoSize = true;
             this.wwwrootDirectionLabel.Font = new System.Drawing.Font("Segoe UI Variable Display Semib", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.wwwrootDirectionLabel.Location = new System.Drawing.Point(12, 42);
+            this.wwwrootDirectionLabel.Location = new System.Drawing.Point(12, 75);
             this.wwwrootDirectionLabel.Name = "wwwrootDirectionLabel";
             this.wwwrootDirectionLabel.Size = new System.Drawing.Size(152, 20);
             this.wwwrootDirectionLabel.TabIndex = 2;
@@ -81,7 +85,7 @@
             // 
             // ProjectName
             // 
-            this.ProjectName.Location = new System.Drawing.Point(132, 72);
+            this.ProjectName.Location = new System.Drawing.Point(132, 105);
             this.ProjectName.Name = "ProjectName";
             this.ProjectName.Size = new System.Drawing.Size(656, 27);
             this.ProjectName.TabIndex = 5;
@@ -90,7 +94,7 @@
             // 
             this.ProjectNameLabel.AutoSize = true;
             this.ProjectNameLabel.Font = new System.Drawing.Font("Segoe UI Variable Display Semib", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.ProjectNameLabel.Location = new System.Drawing.Point(12, 75);
+            this.ProjectNameLabel.Location = new System.Drawing.Point(12, 108);
             this.ProjectNameLabel.Name = "ProjectNameLabel";
             this.ProjectNameLabel.Size = new System.Drawing.Size(114, 20);
             this.ProjectNameLabel.TabIndex = 4;
@@ -100,7 +104,7 @@
             // 
             this.Submit.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.Submit.Font = new System.Drawing.Font("Segoe UI Variable Display Semib", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.Submit.Location = new System.Drawing.Point(649, 399);
+            this.Submit.Location = new System.Drawing.Point(649, 433);
             this.Submit.Name = "Submit";
             this.Submit.Size = new System.Drawing.Size(139, 39);
             this.Submit.TabIndex = 6;
@@ -112,7 +116,7 @@
             // 
             this.buildConfig.AutoSize = true;
             this.buildConfig.Font = new System.Drawing.Font("Segoe UI Variable Small Semibol", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.buildConfig.Location = new System.Drawing.Point(12, 119);
+            this.buildConfig.Location = new System.Drawing.Point(12, 153);
             this.buildConfig.Name = "buildConfig";
             this.buildConfig.Size = new System.Drawing.Size(243, 24);
             this.buildConfig.TabIndex = 7;
@@ -124,7 +128,7 @@
             // 
             this.buildAppsettings.AutoSize = true;
             this.buildAppsettings.Font = new System.Drawing.Font("Segoe UI Variable Small Semibol", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.buildAppsettings.Location = new System.Drawing.Point(12, 149);
+            this.buildAppsettings.Location = new System.Drawing.Point(12, 183);
             this.buildAppsettings.Name = "buildAppsettings";
             this.buildAppsettings.Size = new System.Drawing.Size(281, 24);
             this.buildAppsettings.TabIndex = 8;
@@ -136,7 +140,7 @@
             // 
             this.publishConfig.AutoSize = true;
             this.publishConfig.Font = new System.Drawing.Font("Segoe UI Variable Small Semibol", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.publishConfig.Location = new System.Drawing.Point(12, 230);
+            this.publishConfig.Location = new System.Drawing.Point(12, 285);
             this.publishConfig.Name = "publishConfig";
             this.publishConfig.Size = new System.Drawing.Size(259, 24);
             this.publishConfig.TabIndex = 9;
@@ -148,7 +152,7 @@
             // 
             this.publishAppsettings.AutoSize = true;
             this.publishAppsettings.Font = new System.Drawing.Font("Segoe UI Variable Small Semibol", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.publishAppsettings.Location = new System.Drawing.Point(12, 260);
+            this.publishAppsettings.Location = new System.Drawing.Point(12, 315);
             this.publishAppsettings.Name = "publishAppsettings";
             this.publishAppsettings.Size = new System.Drawing.Size(297, 24);
             this.publishAppsettings.TabIndex = 10;
@@ -160,7 +164,7 @@
             // 
             this.buildBoth.AutoSize = true;
             this.buildBoth.Font = new System.Drawing.Font("Segoe UI Variable Small Semibol", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.buildBoth.Location = new System.Drawing.Point(12, 179);
+            this.buildBoth.Location = new System.Drawing.Point(12, 213);
             this.buildBoth.Name = "buildBoth";
             this.buildBoth.Size = new System.Drawing.Size(192, 24);
             this.buildBoth.TabIndex = 11;
@@ -172,7 +176,7 @@
             // 
             this.publishBoth.AutoSize = true;
             this.publishBoth.Font = new System.Drawing.Font("Segoe UI Variable Small Semibol", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.publishBoth.Location = new System.Drawing.Point(12, 290);
+            this.publishBoth.Location = new System.Drawing.Point(12, 345);
             this.publishBoth.Name = "publishBoth";
             this.publishBoth.Size = new System.Drawing.Size(208, 24);
             this.publishBoth.TabIndex = 12;
@@ -182,7 +186,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(358, 119);
+            this.textBox1.Location = new System.Drawing.Point(358, 153);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
@@ -193,17 +197,62 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label4.Location = new System.Drawing.Point(12, 424);
+            this.label4.Location = new System.Drawing.Point(12, 458);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(137, 15);
             this.label4.TabIndex = 14;
             this.label4.Text = "Developed By Amircliper";
             // 
+            // buildNoOne
+            // 
+            this.buildNoOne.AutoSize = true;
+            this.buildNoOne.Font = new System.Drawing.Font("Segoe UI Variable Small Semibol", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buildNoOne.Location = new System.Drawing.Point(12, 243);
+            this.buildNoOne.Name = "buildNoOne";
+            this.buildNoOne.Size = new System.Drawing.Size(212, 24);
+            this.buildNoOne.TabIndex = 15;
+            this.buildNoOne.TabStop = true;
+            this.buildNoOne.Text = "On Build  Mode ( No One )";
+            this.buildNoOne.UseVisualStyleBackColor = true;
+            // 
+            // publishNoOne
+            // 
+            this.publishNoOne.AutoSize = true;
+            this.publishNoOne.Font = new System.Drawing.Font("Segoe UI Variable Small Semibol", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.publishNoOne.Location = new System.Drawing.Point(12, 375);
+            this.publishNoOne.Name = "publishNoOne";
+            this.publishNoOne.Size = new System.Drawing.Size(228, 24);
+            this.publishNoOne.TabIndex = 16;
+            this.publishNoOne.TabStop = true;
+            this.publishNoOne.Text = "On Publish  Mode ( No One )";
+            this.publishNoOne.UseVisualStyleBackColor = true;
+            // 
+            // ProjectbinDirectionText
+            // 
+            this.ProjectbinDirectionText.Location = new System.Drawing.Point(183, 39);
+            this.ProjectbinDirectionText.Name = "ProjectbinDirectionText";
+            this.ProjectbinDirectionText.Size = new System.Drawing.Size(605, 27);
+            this.ProjectbinDirectionText.TabIndex = 18;
+            // 
+            // ProjectbinDirectionLabel
+            // 
+            this.ProjectbinDirectionLabel.AutoSize = true;
+            this.ProjectbinDirectionLabel.Font = new System.Drawing.Font("Segoe UI Variable Display Semib", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.ProjectbinDirectionLabel.Location = new System.Drawing.Point(12, 42);
+            this.ProjectbinDirectionLabel.Name = "ProjectbinDirectionLabel";
+            this.ProjectbinDirectionLabel.Size = new System.Drawing.Size(165, 20);
+            this.ProjectbinDirectionLabel.TabIndex = 17;
+            this.ProjectbinDirectionLabel.Text = "Project bin Direction : ";
+            // 
             // AutoPublish
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 485);
+            this.Controls.Add(this.ProjectbinDirectionText);
+            this.Controls.Add(this.ProjectbinDirectionLabel);
+            this.Controls.Add(this.publishNoOne);
+            this.Controls.Add(this.buildNoOne);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.publishBoth);
@@ -243,5 +292,9 @@
         private RadioButton publishBoth;
         private TextBox textBox1;
         private Label label4;
+        private RadioButton buildNoOne;
+        private RadioButton publishNoOne;
+        private TextBox ProjectbinDirectionText;
+        private Label ProjectbinDirectionLabel;
     }
 }
