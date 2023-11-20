@@ -55,6 +55,14 @@ public partial class AutoPublish : Form
             OnBuildModeNoOne();
         }
 
+        if (publishBoth.Checked)
+        {
+            OnPublishBoth();
+        }
+
+        // Success Message
+        AppendLog("The Project Has Been Deployed Successful.");
+
         // Enable All Controls In Form
         EnableAllControls();
     }
@@ -88,6 +96,55 @@ public partial class AutoPublish : Form
 
         // Copy All Builded Files From Project Into wwwroot
         AppendLog("Copy All Builded Files From Project Into wwwroot ...");
+        ExecuteCommandOnDirection($@"xcopy ""{ProjectbinDirectionText.Text}"" ""{wwwrootDirection.Text}"" /E /I /Y /H", wwwrootDirection.Text);
+
+        Task.Delay(10000);
+
+        // Starting IIS Project
+        AppendLog("Starting IIS Project ...");
+        ExecuteCommandOnDirection($"%windir%\\system32\\inetsrv\\appcmd start site \"{ProjectName.Text}\"", ProjectDirectionText.Text);
+
+        // Restarting IIS Project
+        AppendLog("Restarting IIS Project ...");
+        ExecuteCommandOnDirection($"IISRESET", ProjectDirectionText.Text);
+
+    }
+
+    /// <summary>
+    /// Execute Mode Of OnPublishBoth
+    /// </summary>
+    private void OnPublishBoth()
+    {
+        // Create Publish Folder
+        AppendLog("Creating Publish Folder ...");
+        ExecuteCommandOnDirection("mkdir -p bin/Release/net7.0/publish", ProjectDirectionText.Text);
+
+        // Publish Project Using dotnet
+        AppendLog("Publishing Project Using dotnet ...");
+        ExecuteCommandOnDirection("dotnet publish -c Release -o bin/Release/net7.0/publish", ProjectDirectionText.Text);
+
+        // Stopping IIS Project
+        AppendLog("Stopping IIS Project ...");
+        ExecuteCommandOnDirection($"%windir%\\system32\\inetsrv\\appcmd stop site \"{ProjectName.Text}\"", ProjectDirectionText.Text);
+
+        Task.Delay(5000);
+
+        // Clear All Folders And Files In wwwroot Folder Because Of Appsettings And web.config
+        AppendLog("Clear All Folders And Files In wwwroot ...");
+        ExecuteCommandOnDirection($@"rmdir /s /q ""{wwwrootDirection.Text}"" & mkdir ""{wwwrootDirection.Text}""", wwwrootDirection.Text);
+
+
+        // Copy All Builded Files From Project Into wwwroot
+        AppendLog("Copy All Published Files From Project Into wwwroot ...");
+        ExecuteCommandOnDirection($@"xcopy ""{ProjectbinDirectionText.Text}"" ""{wwwrootDirection.Text}"" /E /I /Y /H", wwwrootDirection.Text);
+
+        // Clear All Folders And Files In wwwroot Folder Because Of Appsettings And web.config
+        AppendLog("Clear All Folders And Files In wwwroot ...");
+        ExecuteCommandOnDirection($@"rmdir /s /q ""{wwwrootDirection.Text}"" & mkdir ""{wwwrootDirection.Text}""", wwwrootDirection.Text);
+
+
+        // Copy All Builded Files From Project Into wwwroot
+        AppendLog("Copy All Published Files From Project Into wwwroot ...");
         ExecuteCommandOnDirection($@"xcopy ""{ProjectbinDirectionText.Text}"" ""{wwwrootDirection.Text}"" /E /I /Y /H", wwwrootDirection.Text);
 
         Task.Delay(10000);
