@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AutoPublish;
 
@@ -17,7 +16,7 @@ public partial class AutoPublish : Form
     /// <param name="logMessage"></param>
     private void AppendLog(string logMessage)
     {
-        textBox1.AppendText(logMessage + "\r\n");
+        textBox1.AppendText($"{DateTime.Now}" + logMessage + "\r\n");
     }
 
     /// <summary>
@@ -122,8 +121,6 @@ public partial class AutoPublish : Form
         AppendLog("Stopping IIS...");
         ExecuteCommand("net stop W3SVC");
 
-        Task.Delay(5000);
-
         // Create Publish Folder
         AppendLog("Creating Publish Folder ...");
         ExecuteCommandOnDirection("mkdir -p bin/Release/net9.0/publish", ProjectDirectionText.Text);
@@ -153,9 +150,6 @@ public partial class AutoPublish : Form
         ExecuteCommandOnDirection($@"xcopy ""{ProjectbinDirectionText.Text}"" ""{wwwrootDirection.Text}"" /E /I /Y /H",
             wwwrootDirection.Text);
 
-        Task.Delay(10000);
-
-
         AppendLog("Starting IIS...");
         ExecuteCommand("net start W3SVC");
 
@@ -170,53 +164,46 @@ public partial class AutoPublish : Form
     }
 
     /// <summary>
-    ///     Execute Any Command On Windows Cmd
+    ///     Execute any command on Windows CMD in a specific directory and capture output.
     /// </summary>
-    /// <param name="command"></param>
-    /// <param name="direction"></param>
-    private void ExecuteCommandOnDirection(string command, string direction)
+    /// <param name="command">Command to execute</param>
+    /// <param name="directory">Working directory</param>
+    private void ExecuteCommandOnDirection(string command, string directory)
     {
-        // Set the desired directory path
-        var directoryPath = direction;
-
-        // Create a new process to execute the command
-        var process = new Process();
-
         try
         {
-            // Set the process start information
             var startInfo = new ProcessStartInfo
             {
-                FileName = "cmd.exe", // Specify the command prompt
-                RedirectStandardInput = true, // Redirect the standard input
-                UseShellExecute = false, // Do not use the shell execute
-                CreateNoWindow = true, // Do not create a window for the process
-                WorkingDirectory = directoryPath // Set the working directory
+                FileName = "cmd.exe",
+                Arguments = "/c " + command, // Execute and close
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true,
+                WorkingDirectory = directory
             };
 
-            // Start the process
-            process.StartInfo = startInfo;
+            using var process = new Process { StartInfo = startInfo };
+
             process.Start();
 
-            // Execute the git pull command
-            process.StandardInput.WriteLine(command);
-            process.StandardInput.Flush();
-            process.StandardInput.Close();
+            var output = process.StandardOutput.ReadToEnd();
+            var error = process.StandardError.ReadToEnd();
 
-            // Wait for the process to complete
             process.WaitForExit();
+
+            if (!string.IsNullOrWhiteSpace(output))
+                AppendLog(output);
+
+            if (!string.IsNullOrWhiteSpace(error))
+                AppendLog("ERROR: " + error);
         }
         catch (Exception ex)
         {
-            AppendLog("ERROR: " + ex.Message);
-        }
-        finally
-        {
-            // Close the process
-            process.Close();
-            process.Dispose();
+            AppendLog("EXCEPTION: " + ex.Message);
         }
     }
+
 
     private void ExecuteCommand(string command)
     {
