@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AutoPublish;
 
@@ -11,7 +12,7 @@ public partial class AutoPublish : Form
     }
 
     /// <summary>
-    /// Append Log On Log Text Box
+    ///     Append Log On Log Text Box
     /// </summary>
     /// <param name="logMessage"></param>
     private void AppendLog(string logMessage)
@@ -20,7 +21,7 @@ public partial class AutoPublish : Form
     }
 
     /// <summary>
-    /// Clear Log In Text Box
+    ///     Clear Log In Text Box
     /// </summary>
     private void ClearLog()
     {
@@ -50,15 +51,9 @@ public partial class AutoPublish : Form
         AppendLog("Building Project Using dotnet ...");
         ExecuteCommandOnDirection("dotnet build", ProjectDirectionText.Text);
 
-        if (buildNoOne.Checked)
-        {
-            OnBuildModeNoOne();
-        }
+        if (buildNoOne.Checked) OnBuildModeNoOne();
 
-        if (publishBoth.Checked)
-        {
-            OnPublishBoth();
-        }
+        if (publishBoth.Checked) OnPublishBoth();
 
         // Success Message
         AppendLog("The Project Has Been Deployed Successful.");
@@ -68,27 +63,31 @@ public partial class AutoPublish : Form
     }
 
     /// <summary>
-    /// Execute Mode Of OnBuildModeNoOne
+    ///     Execute Mode Of OnBuildModeNoOne
     /// </summary>
     private void OnBuildModeNoOne()
     {
         // Delete Appsettings Foler From bin
         AppendLog("Deleting Appsettings Folder ...");
-        ExecuteCommandOnDirection($"rmdir / s / q {ProjectbinDirectionText.Text}\\Appsettings", ProjectbinDirectionText.Text);
+        ExecuteCommandOnDirection($"rmdir / s / q {ProjectbinDirectionText.Text}\\Appsettings",
+            ProjectbinDirectionText.Text);
 
         // Delete web.config Foler From bin
         AppendLog("Deleting web.config Folder ...");
-        ExecuteCommandOnDirection($"del /F \"{ProjectbinDirectionText.Text}\\web.config\"\r\n", ProjectbinDirectionText.Text);
+        ExecuteCommandOnDirection($"del /F \"{ProjectbinDirectionText.Text}\\web.config\"\r\n",
+            ProjectbinDirectionText.Text);
 
         // Stopping IIS Project
         AppendLog("Stopping IIS Project ...");
-        ExecuteCommandOnDirection($"%windir%\\system32\\inetsrv\\appcmd stop site \"{ProjectName.Text}\"", ProjectDirectionText.Text);
+        ExecuteCommandOnDirection($"%windir%\\system32\\inetsrv\\appcmd stop site \"{ProjectName.Text}\"",
+            ProjectDirectionText.Text);
 
         Task.Delay(5000);
 
         // Clear All Folders And Files In wwwroot Folder Because Of Appsettings And web.config
         AppendLog("Clear All Folders And Files In wwwroot Folder Because Of Appsettings And web.config ...");
-        ExecuteCommandOnDirection($@"for /f ""delims="" %I in ('dir ""{wwwrootDirection.Text}"" /s /b ^| findstr /v /i /c:""Appsettings"" /c:""web.config""') do (
+        ExecuteCommandOnDirection(
+            $@"for /f ""delims="" %I in ('dir ""{wwwrootDirection.Text}"" /s /b ^| findstr /v /i /c:""Appsettings"" /c:""web.config""') do (
                                                 del /f /s /q ""%~I""
                                                 rd /s /q ""%~I""
                                             )
@@ -96,71 +95,82 @@ public partial class AutoPublish : Form
 
         // Copy All Builded Files From Project Into wwwroot
         AppendLog("Copy All Builded Files From Project Into wwwroot ...");
-        ExecuteCommandOnDirection($@"xcopy ""{ProjectbinDirectionText.Text}"" ""{wwwrootDirection.Text}"" /E /I /Y /H", wwwrootDirection.Text);
+        ExecuteCommandOnDirection($@"xcopy ""{ProjectbinDirectionText.Text}"" ""{wwwrootDirection.Text}"" /E /I /Y /H",
+            wwwrootDirection.Text);
 
         Task.Delay(10000);
 
         // Starting IIS Project
         AppendLog("Starting IIS Project ...");
-        ExecuteCommandOnDirection($"%windir%\\system32\\inetsrv\\appcmd start site \"{ProjectName.Text}\"", ProjectDirectionText.Text);
+        ExecuteCommandOnDirection($"%windir%\\system32\\inetsrv\\appcmd start site \"{ProjectName.Text}\"",
+            ProjectDirectionText.Text);
 
         // Restarting IIS Project
         AppendLog("Restarting IIS Project ...");
-        ExecuteCommandOnDirection($"IISRESET", ProjectDirectionText.Text);
-
+        ExecuteCommandOnDirection("IISRESET", ProjectDirectionText.Text);
     }
 
     /// <summary>
-    /// Execute Mode Of OnPublishBoth
+    ///     Execute Mode Of OnPublishBoth
     /// </summary>
     private void OnPublishBoth()
     {
-        // Create Publish Folder
-        AppendLog("Creating Publish Folder ...");
-        ExecuteCommandOnDirection("mkdir -p bin/Release/net7.0/publish", ProjectDirectionText.Text);
-
-        // Publish Project Using dotnet
-        AppendLog("Publishing Project Using dotnet ...");
-        ExecuteCommandOnDirection("dotnet publish -c Release -o bin/Release/net7.0/publish", ProjectDirectionText.Text);
-
         // Stopping IIS Project
-        AppendLog("Stopping IIS Project ...");
-        ExecuteCommandOnDirection($"%windir%\\system32\\inetsrv\\appcmd stop site \"{ProjectName.Text}\"", ProjectDirectionText.Text);
+        //AppendLog("Stopping IIS Project ...");
+        //ExecuteCommandOnDirection($"%windir%\\system32\\inetsrv\\appcmd stop site \"{ProjectName.Text}\"", ProjectDirectionText.Text);
+
+        AppendLog("Stopping IIS...");
+        ExecuteCommand("net stop W3SVC");
 
         Task.Delay(5000);
 
+        // Create Publish Folder
+        AppendLog("Creating Publish Folder ...");
+        ExecuteCommandOnDirection("mkdir -p bin/Release/net9.0/publish", ProjectDirectionText.Text);
+
+        // Publish Project Using dotnet
+        AppendLog("Publishing Project Using dotnet ...");
+        ExecuteCommandOnDirection("dotnet publish -c Release -o bin/Release/net9.0/publish", ProjectDirectionText.Text);
+
         // Clear All Folders And Files In wwwroot Folder Because Of Appsettings And web.config
         AppendLog("Clear All Folders And Files In wwwroot ...");
-        ExecuteCommandOnDirection($@"rmdir /s /q ""{wwwrootDirection.Text}"" & mkdir ""{wwwrootDirection.Text}""", wwwrootDirection.Text);
+        ExecuteCommandOnDirection($@"rmdir /s /q ""{wwwrootDirection.Text}"" & mkdir ""{wwwrootDirection.Text}""",
+            wwwrootDirection.Text);
+
+        // Copy All Builded Files From Project Into wwwroot
+        AppendLog("Copy All Published Files From Project Into wwwroot ...");
+        ExecuteCommandOnDirection($@"xcopy ""{ProjectbinDirectionText.Text}"" ""{wwwrootDirection.Text}"" /E /I /Y /H",
+            wwwrootDirection.Text);
+
+        // Clear All Folders And Files In wwwroot Folder Because Of Appsettings And web.config
+        AppendLog("Clear All Folders And Files In wwwroot ...");
+        ExecuteCommandOnDirection($@"rmdir /s /q ""{wwwrootDirection.Text}"" & mkdir ""{wwwrootDirection.Text}""",
+            wwwrootDirection.Text);
 
 
         // Copy All Builded Files From Project Into wwwroot
         AppendLog("Copy All Published Files From Project Into wwwroot ...");
-        ExecuteCommandOnDirection($@"xcopy ""{ProjectbinDirectionText.Text}"" ""{wwwrootDirection.Text}"" /E /I /Y /H", wwwrootDirection.Text);
-
-        // Clear All Folders And Files In wwwroot Folder Because Of Appsettings And web.config
-        AppendLog("Clear All Folders And Files In wwwroot ...");
-        ExecuteCommandOnDirection($@"rmdir /s /q ""{wwwrootDirection.Text}"" & mkdir ""{wwwrootDirection.Text}""", wwwrootDirection.Text);
-
-
-        // Copy All Builded Files From Project Into wwwroot
-        AppendLog("Copy All Published Files From Project Into wwwroot ...");
-        ExecuteCommandOnDirection($@"xcopy ""{ProjectbinDirectionText.Text}"" ""{wwwrootDirection.Text}"" /E /I /Y /H", wwwrootDirection.Text);
+        ExecuteCommandOnDirection($@"xcopy ""{ProjectbinDirectionText.Text}"" ""{wwwrootDirection.Text}"" /E /I /Y /H",
+            wwwrootDirection.Text);
 
         Task.Delay(10000);
 
-        // Starting IIS Project
-        AppendLog("Starting IIS Project ...");
-        ExecuteCommandOnDirection($"%windir%\\system32\\inetsrv\\appcmd start site \"{ProjectName.Text}\"", ProjectDirectionText.Text);
 
-        // Restarting IIS Project
-        AppendLog("Restarting IIS Project ...");
-        ExecuteCommandOnDirection($"IISRESET", ProjectDirectionText.Text);
+        AppendLog("Starting IIS...");
+        ExecuteCommand("net start W3SVC");
 
+        //// Starting IIS Project
+        //AppendLog("Starting IIS Project ...");
+        //ExecuteCommandOnDirection($"%windir%\\system32\\inetsrv\\appcmd start site \"{ProjectName.Text}\"",
+        //    ProjectDirectionText.Text);
+
+        //// Restarting IIS Project
+        //AppendLog("Restarting IIS Project ...");
+        //ExecuteCommandOnDirection("IISRESET", ProjectDirectionText.Text);
     }
 
     /// <summary>
-    /// Execute Any Command On Windows Cmd
+    ///     Execute Any Command On Windows Cmd
     /// </summary>
     /// <param name="command"></param>
     /// <param name="direction"></param>
@@ -198,7 +208,7 @@ public partial class AutoPublish : Form
         }
         catch (Exception ex)
         {
-            Console.WriteLine("An error occurred: " + ex.Message);
+            AppendLog("ERROR: " + ex.Message);
         }
         finally
         {
@@ -206,6 +216,26 @@ public partial class AutoPublish : Form
             process.Close();
             process.Dispose();
         }
+    }
+
+    private void ExecuteCommand(string command)
+    {
+        var processInfo = new ProcessStartInfo("cmd.exe", "/c " + command)
+        {
+            CreateNoWindow = true,
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true
+        };
+
+        using var process = Process.Start(processInfo);
+        var output = process.StandardOutput.ReadToEnd();
+        var error = process.StandardError.ReadToEnd();
+        process.WaitForExit();
+
+        AppendLog(output);
+        if (!string.IsNullOrWhiteSpace(error))
+            AppendLog("ERROR: " + error);
     }
 
     /// <summary>
