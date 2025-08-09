@@ -8,6 +8,7 @@ public partial class AutoPublish : Form
     {
         InitializeComponent();
         LoadFormData();
+        this.ApplyModernTheme();
     }
 
     /// <summary>
@@ -16,7 +17,7 @@ public partial class AutoPublish : Form
     /// <param name="logMessage"></param>
     private void AppendLog(string logMessage)
     {
-        textBox1.AppendText($"{DateTime.Now}" + logMessage + "\r\n");
+        textBox1.AppendText($"{DateTime.Now} - " + logMessage + "\r\n");
     }
 
     /// <summary>
@@ -123,7 +124,9 @@ public partial class AutoPublish : Form
 
         // Create Publish Folder
         AppendLog("Creating Publish Folder ...");
-        ExecuteCommandOnDirection("mkdir -p bin/Release/net9.0/publish", ProjectDirectionText.Text);
+        var publishPath = Path.Combine("bin", "Release", "net9.0", "publish");
+        ExecuteCommandOnDirection($@"mkdir ""{publishPath}""", ProjectDirectionText.Text);
+
 
         // Publish Project Using dotnet
         AppendLog("Publishing Project Using dotnet ...");
@@ -131,8 +134,11 @@ public partial class AutoPublish : Form
 
         // Clear All Folders And Files In wwwroot Folder Because Of Appsettings And web.config
         AppendLog("Clear All Folders And Files In wwwroot ...");
-        ExecuteCommandOnDirection($@"rmdir /s /q ""{wwwrootDirection.Text}"" & mkdir ""{wwwrootDirection.Text}""",
-            wwwrootDirection.Text);
+
+        //ExecuteCommandOnDirection($@"rmdir /s /q ""{wwwrootDirection.Text}"" & mkdir ""{wwwrootDirection.Text}""",
+        //    wwwrootDirection.Text);
+
+        ForceDeleteDirectory(wwwrootDirection.Text);
 
         // Copy All Builded Files From Project Into wwwroot
         AppendLog("Copy All Published Files From Project Into wwwroot ...");
@@ -141,8 +147,11 @@ public partial class AutoPublish : Form
 
         // Clear All Folders And Files In wwwroot Folder Because Of Appsettings And web.config
         AppendLog("Clear All Folders And Files In wwwroot ...");
-        ExecuteCommandOnDirection($@"rmdir /s /q ""{wwwrootDirection.Text}"" & mkdir ""{wwwrootDirection.Text}""",
-            wwwrootDirection.Text);
+
+        //ExecuteCommandOnDirection($@"rmdir /s /q ""{wwwrootDirection.Text}"" & mkdir ""{wwwrootDirection.Text}""",
+        //    wwwrootDirection.Text);
+
+        ForceDeleteDirectory(wwwrootDirection.Text);
 
 
         // Copy All Builded Files From Project Into wwwroot
@@ -192,9 +201,6 @@ public partial class AutoPublish : Form
 
             process.WaitForExit();
 
-            if (!string.IsNullOrWhiteSpace(output))
-                AppendLog(output);
-
             if (!string.IsNullOrWhiteSpace(error))
                 AppendLog("ERROR: " + error);
         }
@@ -223,6 +229,32 @@ public partial class AutoPublish : Form
         AppendLog(output);
         if (!string.IsNullOrWhiteSpace(error))
             AppendLog("ERROR: " + error);
+    }
+
+    private void ForceDeleteDirectory(string path)
+    {
+        try
+        {
+            if (Directory.Exists(path))
+            {
+                var di = new DirectoryInfo(path)
+                {
+                    Attributes = FileAttributes.Normal
+                };
+
+                foreach (var info in di.GetFileSystemInfos("*", SearchOption.AllDirectories))
+                    info.Attributes = FileAttributes.Normal;
+
+                Directory.Delete(path, true);
+            }
+
+            Directory.CreateDirectory(path);
+            AppendLog("Directory reset successfully.");
+        }
+        catch (Exception ex)
+        {
+            AppendLog("ERROR while deleting directory: " + ex.Message);
+        }
     }
 
     /// <summary>
